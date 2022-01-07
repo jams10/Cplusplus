@@ -1,0 +1,41 @@
+
+# 03. 낌새만 보이면 const를 들이대 보자
+##### const는 어떤 값이 불변이여야 한다는 작성자의 의도를 컴파일러와 다른 프로그래머와 나눌 수 있도록 하는 수단.
+
+### 1. 상수 데이터와 상수 포인터
+```c++
+char greeting[] = "Hello";
+char *p = greeting;					// 비상수 데이터를 가리키는 비상수 포인터
+const char *p = greeting;			// 상수 데이터를 가리키는 비상수 포인터
+char * const p = greeting;			// 비상수 데이터를 가리키는 상수 포인터
+const char * const p = greeting;	// 상수 데이터를 가리키는 상수 포인터
+```
+##### 위 코드에서 볼 수 있듯이, const 키워드가 * 왼쪽에 있으면 상수 데이터로 포인터가 가리키는 대상이 상수인 반면에, 오른쪽에 있으면 포인터 자체가 상수가 되어 가리키는 대상을 바꿀 수 없음.
+##### *와 const의 위치만을 고려하기 때문에 아래 코드는 같은 의미의 코드임에 유의.
+```C++  
+void f1(const Widget *pw);
+void f2(Widget const *pw);
+```
+### 2. Iterator
+
+```c++
+// 여기서 iterator는 T* const 처럼 동작. 상수 포인터.
+const std::vector<int>::iterator iter = v.begin();
+*iter = 10;	// 자신이 가리키는 대상의 '값'은 바꿀 수 있음.
+++iter;		// 자신이 가리키는 '대상'을 바꿀 수 없음.
+
+// const_iterator는 변경이 불가능한 객체를 가리키는 포인터
+std::vector<int<::const_iterator cIter = v.begin();
+*cIter = 10; // 자신이 가리키는 대상의 '값'을 바꿀 수 없음.
+++cIter;	 // 자신이 가리키는 '대상'은 바꿀 수 있음.
+```
+### 3. 함수 선언에서의 const
+```c++
+const Rational operator*(const Rational& lhs, const Rational& rhs);
+...
+if(a * b = c) ...	// 원래는 '=='로 비교 하려 했으나 오타로 인해 대입이 되는 실수를 할 수 있음.
+```
+##### 위 사례를 방지하고자 연산자 오버로딩의 리턴 타입에 const 키워드를 넣어 선언한 것이다.
+
+
+
